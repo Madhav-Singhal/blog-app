@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>welcome to blog</title>
+    </head>
+    <body bgcolor="cyan">
+        <h1 align="center">Your daily Blog</h1>
+        <h2 align="right">
+            <a href="{% url 'blog_app:user_list' %}"
+                ><button>Create your Blog</button>
+            </a>
+        </h2>
+
+        <br />{% for x in obj %} <br />
+        <ul>
+            <h3>Title: {{ x.title }}</h3>
+
+            {% if x.img %}
+            <img src="{{x.img.url}}" height="200" width="300" /><br />
+            {% endif %}<br />
+
+            <a href="detail/{{x.id}}">go to post </a>
+            <br />
+
+            <br />
+        </ul>
+        {% endfor %}
+    </body>
+</html>

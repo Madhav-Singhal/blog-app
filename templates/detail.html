@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <h3>Author: {{ obj.author }}<br /></h3>
+        <h3>Title: {{ obj.title }}<br /></h3>
+
+        {% if obj.img %}
+        <img src="{{obj.img.url}}" height="200" width="300" /><br />
+        {% endif %}{{ obj.text }}<br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <h2>Comments:</h2>
+        <form method="post">
+            {% csrf_token%} {{ form.as_p }}
+            <input type="submit" name="post" />
+        </form>
+        <br /><br />
+        <h3>{{comments.count}} Comment{{ comments|pluralize}}</h3>
+        <br />
+
+        {% for i in comments %}
+        <ul>
+            <div>
+                {{i.comment}}<br />
+                by:{{i.user_id}}
+            </div>
+        </ul>
+        <br />{% endfor %}
+    </body>
+</html>

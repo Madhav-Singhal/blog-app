@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        {% for i in obj %}
+        <a href="{% url 'blog_app:detail' i.id %}">{{i.title}} </a> <br />
+        <a href="delete/{{i.id}}"><button>delete</button></a><br />
+        <a href="edit/{{i.id}}"><button>edit</button></a><br />
+        {% endfor%}
+        <a href="{% url 'blog_app:create' %}"><button>create</button></a>
+        <a href=" logout ">logout</a>
+    </body>
+</html>
