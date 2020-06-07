@@ -13,7 +13,8 @@
 
         <br />{% for x in obj %} <br />
         <ul>
-            <h3>Title: {{ x.title }}</h3>
+            <h3>Title: {{ x.title }}</h3><br><br>
+            {{x.get_text}}<br>
 
             {% if x.img %}
             <img src="{{x.img.url}}" height="200" width="300" /><br />
