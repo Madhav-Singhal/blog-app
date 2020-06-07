@@ -20,12 +20,18 @@ class Post(models.Model):
         return self.title
 
 
+    def get_text(self):
+        return self.text[0:30]
+
+
 
 
 
 class AddComment(models.Model):
     post_id = models.ForeignKey(Post, on_delete = models.CASCADE)
     user_id = models.ForeignKey(User, on_delete = models.CASCADE)
+    reply = models.ForeignKey("self",null=True, blank=True, on_delete = models.CASCADE, related_name='replies')
+
 
     comment = models.TextField()
     
