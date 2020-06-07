@@ -10,12 +10,11 @@ urlpatterns = [
    
     path('', views.list, name = 'list'),
     path('create/', views.create, name = 'create'),
-    # path('comments/<int:id>/', views.comments, name = 'comments'),
-    path('login/', views.login, name = 'login'),
+    path('create/<int:id>/login/', views.login, name = 'login'),
+    path('create/login/', views.login, name = 'login'),
     path('create/register/', views.register, name = 'register'),
-    # path('create/login/', views.login, name = 'login'),
-    path('detail/logink/<int:id>', views.logink, name = 'logink'),
-    path('detail/registerk/<int:id>', views.registerk, name = 'registerk'),
+    path('create/<int:id>/register/', views.register, name = 'register'),
+
     path('create/logout/', views.logout, name = 'logout'),
     path('create/user_list/logout/', views.logout, name = 'logout'),
     path('create/user_list/', views.user_list, name = 'user_list'),
