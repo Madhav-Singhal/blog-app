@@ -6,31 +6,10 @@ from django.contrib.auth.models import User, auth
 
 # Create your views here.
 
-def logink(request, id):
-    if request.method == 'POST':
-
-
-        val3 = request.POST['username']
-        val4 = request.POST['password']
-
-        user = auth.authenticate(username=val3, password=val4)
-
-        if user is not None:
-            auth.login(request, user)
-            # id=request.user.id
-            
-            return redirect('blog_app:detail', id)
-        else:
-            return redirect('blog_app:logink', id)
-
-    else:
-        return render(request, 'logink.html', {'id':id})
 
 
 
-
-def registerk(request, id):
-
+def register(request, id=None):
     if request.method == 'POST':
         val1 = request.POST['first_name']
         val2 = request.POST['last_name']
@@ -40,39 +19,9 @@ def registerk(request, id):
 
         if val4 == val5:
             if User.objects.filter(username=val3).exists():
-              
-                
-                return render(request, 'registerk.html', {'id':id})
-            else:
+                if id:
+                    return render(request, 'register.html', {'id':id})
 
-
-                user = User.objects.create_user(username = val3, password = val4, first_name = val1, last_name = val2)
-                user.save()
-                auth.login(request, user)
-                # pk = user.instance.pk
-                return redirect("blog_app:detail", id)
-
-        else:
-            return redirect('blog_app:registerk', id)
-
-    else:
-        return render(request, 'registerk.html', {'id':id})
-
-
-
-
-
-
-def register(request):
-    if request.method == 'POST':
-        val1 = request.POST['first_name']
-        val2 = request.POST['last_name']
-        val3 = request.POST['username']
-        val4 = request.POST['password']
-        val5 = request.POST['confirm']
-
-        if val4 == val5:
-            if User.objects.filter(username=val3).exists():
               
                 
                 return render(request, 'register.html')
@@ -82,13 +31,21 @@ def register(request):
                 user = User.objects.create_user(username = val3, password = val4, first_name = val1, last_name = val2)
                 user.save()
                 auth.login(request, user)
+                if id:
+                    return redirect("blog_app:detail", id)
                 # pk = user.instance.pk
                 return redirect("blog_app:user_list")
 
         else:
+            if id:
+                return redirect('blog_app:register', id)
+
             return redirect('blog_app:register')
 
     else:
+        if id:
+            return render(request, 'register.html', {'id':id})
+
         return render(request, 'register.html')
 
 
@@ -106,7 +63,7 @@ def user_list(request):
 
     return render(request, 'user_list.html', {'obj':obj})
 
-def login(request):
+def login(request, id=None):
     if request.method == 'POST':
 
 
@@ -118,18 +75,22 @@ def login(request):
         if user is not None:
             auth.login(request, user)
             # id=request.user.id
+            if id:
+                return redirect('blog_app:detail', id)
+
             
             return redirect('blog_app:user_list')
         else:
+            if id:
+
+                return redirect('blog_app:login', id)
             return redirect('blog_app:login')
 
     else:
+        if id:
+            return render(request, 'login.html', {'id':id})
+
         return render(request, 'login.html')
-
-
-    # return render(request, 'home.html')
-
-
 
 
 
@@ -166,19 +127,23 @@ def detail(request, id):
 
     object = Post.objects.get(pk = id)
     # print(object.img)
-    comments = AddComment.objects.all().filter(post_id=id)
+    comments = AddComment.objects.all().filter(post_id=id, reply=None)
     # comments = AddComment.objects.all().filter(post=id), c
     form = CommentForm
     if request.method == "POST":
         if not request.user.is_authenticated:
-            return render(request, 'index.html', {'id':id})
+            return redirect('blog_app:login', id)
         form = CommentForm(request.POST or None )
         if form.is_valid():
             # obj = form.save(commit=False)get('comment')
             form.save(commit=False)
             content = request.POST.get('comment')
+            reply_id = request.POST.get('comment_id')
+            comment_qs = None
+            if reply_id:
+                comment_qs = AddComment.objects.get(id=reply_id)
 
-            comment = AddComment.objects.create(user_id=request.user, post_id=object, comment = content)
+            comment = AddComment.objects.create(user_id=request.user, post_id=object, comment = content, reply = comment_qs)
             # comment.save()
             # obj.author = request.user
             comment.save()
