@@ -108,9 +108,15 @@
                                     alt="sing up image"
                                 />
                             </figure>
-                            <a href="{% url 'blog_app:login' %}" class="signup-image-link"
+                            {% if id%}
+                            <a href="{% url 'blog_app:login' id %}" class="signup-image-link"
                                 >I am already member</a
                             >
+                            {% else%}
+                            <a href="{% url 'blog_app:login'  %}" class="signup-image-link"
+                                >I am already member</a
+                            >
+                            {%endif%}
                         </div>
                     </div>
                 </div>
