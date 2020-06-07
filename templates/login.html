@@ -30,9 +30,15 @@
                                     alt="sing up image"
                                 />
                             </figure>
-                            <a href="{% url 'blog_app:register' %}" class="signup-image-link"
+                            {% if id%}
+                            <a href="{% url 'blog_app:register' id %}" class="signup-image-link"
                                 >Create an account</a
                             >
+                            {% else%}
+                            <a href="{% url 'blog_app:register'  %}" class="signup-image-link"
+                                >Create an account</a
+                            >
+                            {%endif%}
                         </div>
 
                         <div class="signin-form">
