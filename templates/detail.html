@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     </head>
     <body>
         <h3>Author: {{ obj.author }}<br /></h3>
@@ -11,21 +12,72 @@
         <img src="{{obj.img.url}}" height="200" width="300" /><br />
         {% endif %}{{ obj.text }}<br /><br /><br /><br /><br /><br /><br /><br /><br />
         <h2>Comments:</h2>
+
+
+
         <form method="post">
             {% csrf_token%} {{ form.as_p }}
             <input type="submit" name="post" />
         </form>
         <br /><br />
-        <h3>{{comments.count}} Comment{{ comments|pluralize}}</h3>
+        {{comments.count}} Comment{{ comments|pluralize}}
         <br />
 
         {% for i in comments %}
-        <ul>
-            <div>
-                {{i.comment}}<br />
-                by:{{i.user_id}}
+        <blockquote class="blockquote">
+        
+                <p class="mb-0"><small>{{i.comment}}</small></p> 
+                <footer class="blockquote-footer"><small>by <cite title="Source Title">{{i.user_id|capfirst}}</cite></small>
+                    <button type="button" class="reply-btn btn btn-outline-dark btn-sm ml-2">Reply</button>
+                </footer>
+        </blockquote>
+                
+
+            
+        <div class="replied-comments container mt-2" style="display:none;">
+            {{i.replies.count}} Reply
+            {% for reply in i.replies.all %}
+
+
+            <blockquote class="blockquote">
+            <p class="mb-0"><small>{{reply.comment}}</small></p> 
+            <footer class="blockquote-footer"><small>by <cite title="Source Title">{{reply.user_id|capfirst}}</cite></small>
+                </footer>
+            </blockquote>
+            {% endfor %}
+            <div class="form-group row" >
+                <form method="post" id="form1">
+
+                {% csrf_token%} 
+                <input type="hidden" name="comment_id" value="{{i.id}}">
+                {{ form.as_p }}
+                <button name="data"  >submit</button>
+        </form>
+
+
             </div>
-        </ul>
-        <br />{% endfor %}
+        </div>
+    
+       {% endfor %}
+
+
+
+
+
+       <script type="">
+            $('.reply-btn').click(function(){
+
+                $(this).parent().parent().next('.replied-comments').fadeToggle();
+            })
+
+          
+
+
+       </script>
     </body>
 </html>
+
+
+
+
+
